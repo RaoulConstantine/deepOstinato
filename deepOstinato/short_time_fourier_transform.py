@@ -3,6 +3,7 @@ import numpy as np
 from deepOstinato.constants import FRAME_SIZE, HOP_SIZE
 
 class STFT:
+    """short-time Fourier transform"""
 
     def __init__(self):
         pass
