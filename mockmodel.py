@@ -23,7 +23,7 @@ gan = keras.models.Sequential([generator, discriminator])
 
 
 discriminator.compile(loss='binary_crossentropy',optimizer = 'rmsprop')
-"""using binary crossentropy because the disciminator is a binary classifier"""
+"""using binary crossentropy, the disciminator is a binary classifier"""
 discriminator.trainable = False #So that we don’t update the discriminator when updating the generator.
 gan.compile(loss='binary_crossentropy',optimizer = 'rmsprop')
 
