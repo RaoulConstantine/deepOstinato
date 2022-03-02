@@ -1,33 +1,30 @@
-import tensorflow
-from tensorflow import Sequential, layers
+import tensorflow as tf
+from tensorflow.keras import Sequential, layers
+import keras
+import numpy as np
 
 
-def generator():
-    model = Sequential()
-    model.add(layers.Dense(3000*256*64, input_shape=[512])),
-    """adding a dense layer with a given dimension"""
-    model(layers.Reshape([3000,256,64])),
-    """reshaping the layerto get a tensor"""
-    model(layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')),
-    """feeding the tensor to a convolutional layer"""
-    #check if batch normalization is needed
-    model(layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')),
+generator = keras.models.Sequential([
+    keras.layers.Dense(1024*2930*1, input_shape=[100]),
+    keras.layers.Reshape([1024,2930,1]),
+    keras.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu'),
+    keras.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')])
 
-def discriminator():
-    model = Sequential()
-    model(layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu')),
-    model(layers.Dropout(0.4)),
-    model(layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu')),
-    model(layers.Dropout(0.4)),
-    model(layers.Flatten()),
-    model.add(layers.Dense(1, activation = 'sigmoid'))
+discriminator = keras.models.Sequential([
+    keras.layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu'),
+    keras.layers.MaxPooling2D(pool_size=(2,2)),
+    keras.layers.Dropout(0.4),
+    keras.layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu'),
+    keras.layers.Dropout(0.4),
+    keras.layers.Flatten(),
+    keras.layers.Dense(1, activation = 'sigmoid')])
 
-model = Sequential()
-gan = model(generator, discriminator)
+gan = keras.models.Sequential([generator, discriminator])
 
-model.compile(loss='binary_crossentropy', optimizer = 'rmsprop')
+
+discriminator.compile(loss='binary_crossentropy',optimizer = 'rmsprop')
 discriminator.trainable = False #So that we don’t update the discriminator when updating the generator.
-
+gan.compile(loss='binary_crossentropy',optimizer = 'rmsprop')
 
 def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
     generator, discriminator = gan.layers
@@ -43,3 +40,5 @@ def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
             y2 = tf.constant([[1.]] * batch_size)
             discriminator.trainable = False
             gan.train_on_batch(noise.y2)
+
+X_train = np.load('/content/drive/MyDrive/audio/npy_file_no0.npy').reshape((1024,2930,1)) #loading from g_drive
