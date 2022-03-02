@@ -1,34 +1,35 @@
-import tensorflow as tf
+import tensorflow
 from tensorflow import Sequential, layers
 
 
 def generator():
-    x = 7
-    y = 7
-    z = 128
-    x1 = 7
-    y1 = 7
-    z1 = 128
-
     model = Sequential()
-    model.add(layers.Dense(x*y*z, input_shape=[7,7,128])),
-    model(layers.Reshape([x1,y1,z1])),
-    model(layers.conv2dtranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')),
-    model.add(layers.Dense(10, activation = 'softmax'))
+    model.add(layers.Dense(3000*256*64, input_shape=[512])),
+    """adding a dense layer with a given dimension"""
+    model(layers.Reshape([3000,256,64])),
+    """reshaping the layerto get a tensor"""
+    model(layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')),
+    """feeding the tensor to a convolutional layer"""
+    #check if batch normalization is needed
+    model(layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')),
 
 def discriminator():
     model = Sequential()
-    model(layers.conv2dtranspose(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu')),
-    model.add(layers.Dense(1, activation = 'softmax'))
+    model(layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu')),
+    model(layers.Dropout(0.4)),
+    model(layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu')),
+    model(layers.Dropout(0.4)),
+    model(layers.Flatten()),
+    model.add(layers.Dense(1, activation = 'sigmoid'))
 
 model = Sequential()
 gan = model(generator, discriminator)
 
-discriminator.compile(loss='binary_crossentropy', optimizer = 'Adam')
-discriminator.trainable = False
-gan.compile(loss = 'binary_crossentropy', optimizer = 'Adam')
+model.compile(loss='binary_crossentropy', optimizer = 'rmsprop')
+discriminator.trainable = False #So that we don’t update the discriminator when updating the generator.
 
-def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 'XX'):
+
+def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
     generator, discriminator = gan.layers
     for epoch in range(n_epochs):
         for X_batch in dataset:

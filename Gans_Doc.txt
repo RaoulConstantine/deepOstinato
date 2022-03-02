@@ -21,16 +21,24 @@ we define the loss to measure how good the generator to come up with new images 
 then we can define the optimizers to minimize the loss (we should use Adam optimizer)
 
 def generator():
+
+    x = 7
+    y = 7
+    z = 128
+    x1 = 7
+    y1 = 7
+    z1 = 128
+
     model = Sequential()
-    model.add(layers.Dense(x*y*z, input_shape=[])),
+    model.add(layers.Dense(x*y*z, input_shape=[7,7,128])),
     model(layers.Reshape([x1,y1,z1])),
-    model(layres.conv2dtranspose('XX', kernel_size = 'X', strides ='X', padding = 'XXXX',activation = 'relu')),
-    model.add(layers.Dense('X', activation = 'softmax' or 'sigmoid'))
+    model(layres.conv2dtranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')),
+    model.add(layers.Dense(10, activation = 'softmax' or 'sigmoid'))
 
 def discriminator():
     model = Sequential()
-    model(layres.conv2dtranspose('XX', kernel_size = 'X', strides ='X', padding = 'XXXX',activation = 'relu')),
-    model.add(layers.Dense('X', activation = 'softmax' or 'sigmoid'))
+    model(layres.conv2dtranspose(64, kernel_size = 5, strides =2, padding = same ,activation = 'relu')),
+    model.add(layers.Dense(1, activation = 'softmax' or 'sigmoid'))
 
 gan = model(generator, discriminator)
 
