@@ -23,6 +23,7 @@ gan = keras.models.Sequential([generator, discriminator])
 
 
 discriminator.compile(loss='binary_crossentropy',optimizer = 'rmsprop')
+"""using binary crossentropy because the disciminator is a binary classifier"""
 discriminator.trainable = False #So that we don’t update the discriminator when updating the generator.
 gan.compile(loss='binary_crossentropy',optimizer = 'rmsprop')
 
@@ -30,15 +31,19 @@ def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
     generator, discriminator = gan.layers
     for epoch in range(n_epochs):
         for X_batch in dataset:
+            """training the disciminator"""
             noise = tf.random.normal(shape =[batch_size, codings_size])
             generated_images = generator(noise)
             X_fake_and_real = tf.concat([generated_images, X_batch], axis = 0)
             y1= tf.constant([[0.]]* batch_size + [[1.]] * batch_size)
+            """seting the target y1 to 0 fo fake images and 1 for real images"""
             discriminator.trainable = True
             discriminator.train_on_batch(X_fake_and_real, y1)
+            """training the generator"""
             noise = tf.random.normal(shape = [batch_size,codings_size])
             y2 = tf.constant([[1.]] * batch_size)
             discriminator.trainable = False
+            """set to False to avoid warning by Keras"""
             gan.train_on_batch(noise.y2)
 
 X_train = np.load('/content/drive/MyDrive/audio/npy_file_no0.npy').reshape((1024,2930,1)) #loading from g_drive
