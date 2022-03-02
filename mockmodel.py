@@ -8,8 +8,11 @@ generator = keras.models.Sequential([
     keras.layers.Dense(1024*2930*1, input_shape=[100]),
     keras.layers.Reshape([1024,2930,1]),
     keras.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu'),
-    keras.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')])
+    keras.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')
+    ])
+"""the shapes of the layers are trail and error and we can change them based on our data"""
 
+"""we define the discriminator"""
 discriminator = keras.models.Sequential([
     keras.layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu'),
     keras.layers.MaxPooling2D(pool_size=(2,2)),
@@ -18,6 +21,7 @@ discriminator = keras.models.Sequential([
     keras.layers.Dropout(0.4),
     keras.layers.Flatten(),
     keras.layers.Dense(1, activation = 'sigmoid')])
+
 
 gan = keras.models.Sequential([generator, discriminator])
 
@@ -46,4 +50,5 @@ def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
             """set to False to avoid warning by Keras"""
             gan.train_on_batch(noise.y2)
 
-X_train = np.load('/content/drive/MyDrive/audio/npy_file_no0.npy').reshape((1024,2930,1)) #loading from g_drive
+#loading from g_drive
+X_train = np.load('/content/drive/MyDrive/audio/npy_file_no0.npy').reshape((1024,2930,1))
