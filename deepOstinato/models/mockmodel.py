@@ -22,8 +22,6 @@ generator = keras.models.Sequential([
 
 """using conv2d to generate an image from a random seed"""
 
-<<<<<<< HEAD:mockmodel.py
-
 #we're defining the discriminator
 discriminator = keras.models.Sequential([
     keras.layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu'),
@@ -48,9 +46,6 @@ gan.compile(loss='binary_crossentropy',optimizer = 'Adam')
 
 
 def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
-=======
-def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 1000):
->>>>>>> bacf12128160109aa235c305e0a4bdf6a4de1151:deepOstinato/models/mockmodel.py
     generator, discriminator = gan.layers
     for epoch in range(n_epochs):
         for X_batch in dataset:
@@ -59,7 +54,7 @@ def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 1000):
             generated_images = generator(noise)
             X_fake_and_real = tf.concat([generated_images, X_batch], axis = 0)
             y1= tf.constant([[0.]]* batch_size + [[1.]] * batch_size)
-            """seting the target y1 to 0 fo fake images and 1 for real images"""
+            """setting the target y1 to 0 fo fake images and 1 for real images"""
             discriminator.trainable = True
             discriminator.train_on_batch(X_fake_and_real, y1)
             """training the generator"""
