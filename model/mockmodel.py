@@ -21,7 +21,32 @@ generator = keras.models.Sequential([
     ])
 
 """using conv2d to generate an image from a random seed"""
-def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 1000):
+
+
+#we're defining the discriminator
+discriminator = keras.models.Sequential([
+    keras.layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu'),
+    keras.layers.MaxPooling2D(pool_size=(2,2)),
+    #using maxpooling to reduce the resolution when it's too big
+    keras.layers.Dropout(0.4), #adding a dropout layer to prevent the neurons from updating the weights only according a specific output
+    keras.layers.Conv2D(64, kernel_size = 5, strides =2, padding = 'same' ,activation = 'relu'),
+    #adding a conv layer to help produce a tensor of outputs
+    #strides: the number of pixerls the kernel is moving by in each direction
+    keras.layers.Dropout(0.4),
+    keras.layers.Flatten(), #getting a vector representation from flattening the image
+    keras.layers.Dense(1, activation = 'sigmoid')]) #final layer
+
+gan = keras.models.Sequential([generator, discriminator])
+
+
+discriminator.compile(loss='binary_crossentropy',optimizer = 'Adam')
+"""using binary crossentropy, the disciminator is a binary classifier"""
+discriminator.trainable = False #So that we don’t update the discriminator when updating the generator.
+gan.compile(loss='binary_crossentropy',optimizer = 'Adam')
+#Adam is a combination of the best of both rmsprop and SGD
+
+
+def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
     generator, discriminator = gan.layers
     for epoch in range(n_epochs):
         for X_batch in dataset:
