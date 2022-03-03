@@ -1,15 +1,17 @@
-
-from typing_extensions import Self
+import tensorflow as tf
 from tensorflow.keras import Sequential, layers
 
-class deepo():
+class Deepo():
     def __init__(self):
         pass
 
     def generator():
+        X = ''
+        Y = ''
+        Z = ''
         generator = Sequential()
-        generator.layers.Dense(1024*2930*1, input_shape=[100]),
-        generator.layers.Reshape([1024,2930,1]),
+        generator.layers.Dense(X*Y*Z, input_shape=[100]),
+        generator.layers.Reshape([X,Y,Z]),
         generator.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu'),
         generator.layers.Conv2DTranspose(64, kernel_size = 5, strides =2, padding = 'same',activation = 'relu')
         return generator
