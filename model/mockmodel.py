@@ -22,6 +22,7 @@ generator = keras.models.Sequential([
 
 """using conv2d to generate an image from a random seed"""
 
+<<<<<<< HEAD:mockmodel.py
 
 #we're defining the discriminator
 discriminator = keras.models.Sequential([
@@ -47,6 +48,9 @@ gan.compile(loss='binary_crossentropy',optimizer = 'Adam')
 
 
 def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 50):
+=======
+def train_gan(gan, dataset, batch_size, codings_size, n_epochs = 1000):
+>>>>>>> bacf12128160109aa235c305e0a4bdf6a4de1151:deepOstinato/models/mockmodel.py
     generator, discriminator = gan.layers
     for epoch in range(n_epochs):
         for X_batch in dataset:

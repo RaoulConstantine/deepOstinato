@@ -3,7 +3,11 @@
 .ipynb_checkpoints
 .DS_Store
 raw_data/
+<<<<<<< HEAD
 notebooks
+=======
+notebooks/
+>>>>>>> bacf12128160109aa235c305e0a4bdf6a4de1151
 *.csv
 **/__pycache__/
 .env
