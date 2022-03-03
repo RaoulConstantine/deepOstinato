@@ -12,6 +12,7 @@ soundfile
 numpy
 pandas
 scikit-learn
+tensorflow
 
 # tests/linter
 black
@@ -37,6 +38,6 @@ librosa
 midi2audio
 soundfile
 
-#operating system
-os
 
+#frontend
+streamlit
